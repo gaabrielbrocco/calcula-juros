@@ -1,13 +1,14 @@
 <template>
   <v-app>
     <v-main>
-      <Calculadora />
+      <DialogForm />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
-import Calculadora from './view/calculadora.vue';
+import DialogForm from './components/dialog-form.vue';
+
 
 
 </script>
