@@ -60,13 +60,12 @@
     </v-row>
     <v-row>
       <v-data-table
-          density="compact"
-          fixed-header
-          hover
-          items-per-page="25"
-          :headers="colunasTabela.value"
-          :items="resultados.value"
-        >
+        density="compact"
+        hover
+        items-per-page="25"
+        :headers="headers"
+        :items="resultados"
+      >
       </v-data-table>
     </v-row>
   </v-container>
@@ -82,23 +81,59 @@ const taxaJuros = ref(0);
 const periodo = ref(0);
 const resultados = ref([]);
 const colunasTabela = ref(colunas);
-
+const headers = ref([
+{
+      title: "Meses",
+      key: "meses",
+    },
+    {
+      title: "Valor inicial",
+      key: "valorInicial",
+    },
+    {
+      title: "Aporte",
+      key: "aporte",
+    },
+    {
+      title: "Rendimento",
+      key: "rendimento",
+    },
+    {
+      title: "Valor final",
+      key: "valorFinal",
+    },
+]);
 
 const calculaJuros = () => {
-
   let saldo = aporteInicial.value;
   let porcentagemTaxa = taxaJuros.value / 100 / 12;
   let resultado = [];
 
   for (let i = 0; i < periodo.value; i++) {
-    saldo = saldo * (1 + porcentagemTaxa) + aporteMensal.value;
-    resultado.push((saldo - aporteMensal.value).toFixed(2));
+    let valorInicialMes = i === 0 ? saldo.toFixed(2) : resultado[i - 1].valorFinal;
+    saldo = valorInicialMes * (1 + porcentagemTaxa) + aporteMensal.value;
+
+    resultado.push({
+      meses: i + 1,
+      valorInicial: formatarParaMoeda(parseFloat(valorInicialMes)),
+      aporte: aporteMensal.value,
+      rendimento: formatarParaMoeda(parseFloat((saldo - valorInicialMes - aporteMensal.value).toFixed(2))),
+      valorFinal: saldo.toFixed(2)
+    });
   }
 
-  resultados.value =  resultado;
-  console.log( resultados.value);
-
+  resultados.value = resultado;
+  console.log(resultados.value);
 };
-  // F = P*(1+J)N
+
+const formatarParaMoeda = (valorNumerico) => {
+  const valorConvertido = new Intl.NumberFormat("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  }).format(valorNumerico);
+  return valorConvertido;
+};
+
+// F = P*(1+J)N
 
 </script>

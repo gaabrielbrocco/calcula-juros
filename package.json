@@ -8,8 +8,10 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "maska": "^2.1.11",
     "roboto-fontface": "*",
     "vue": "^3.3.0",
+    "vue-mask-directive": "^1.0.4",
     "vuetify": "^3.0.0"
   },
   "devDependencies": {
